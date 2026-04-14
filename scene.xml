@@ -1,0 +1,53 @@
+<mujoco model="scene">
+
+    <!-- 🔥 IMPORTANT FIX -->
+    <compiler angle="degree" coordinate="local"/>
+
+    <include file="so101_new_calib.xml"/>
+
+    <option gravity="0 0 -9.81"/>
+
+    <visual>
+        <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3"/>
+    </visual>
+
+    <asset>
+        <texture type="2d" name="groundplane" builtin="checker"
+                 width="256" height="256"
+                 rgb1="0.2 0.3 0.4"
+                 rgb2="0.1 0.2 0.3"/>
+
+        <material name="groundplane" texture="groundplane"/>
+
+        <material name="red_object" rgba="1 0 0 1"/>
+    </asset>
+
+    <worldbody>
+
+        <light pos="0 0 3" dir="0 0 -1"/>
+
+        <!-- FLOOR -->
+        <geom type="plane" size="5 5 0.1" material="groundplane"/>
+
+        <!-- TABLE -->
+        <body pos="0 0 0">
+            <geom type="box" size="0.5 0.3 0.02" pos="0 0 0.02" rgba="0.6 0.6 0.6 1"/>
+        </body>
+
+        <!-- OBJECT -->
+        <body name="red_box" pos="0.25 0 0.05">
+            <freejoint/>
+            <geom type="box" size="0.02 0.02 0.02" material="red_object"/>
+        </body>
+
+    </worldbody>
+
+    <!-- 🔥 CONTROLLED GRASP -->
+    <equality>
+        <weld name="grasp_weld"
+              body1="moving_jaw_so101_v1"
+              body2="red_box"
+              active="false"/>
+    </equality>
+
+</mujoco>
